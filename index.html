@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Linter.ai - JSON/YAML Tools</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --bg-main: #0a0a0a;
+        --bg-sidebar: #111111;
+        --bg-card: #161616;
+        --border: #262626;
+        --text-muted: #a1a1aa;
+        --text-main: #e4e4e7;
+        --accent: #3b82f6;
+        --accent-hover: #2563eb;
+        --error: #ef4444;
+        --success: #22c55e;
+      }
+      body {
+        margin: 0;
+        background: var(--bg-main);
+        color: var(--text-main);
+        font-family: 'Inter', sans-serif;
+        height: 100vh;
+        overflow: hidden;
+      }
+      linter-app {
+        display: block;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <linter-app></linter-app>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

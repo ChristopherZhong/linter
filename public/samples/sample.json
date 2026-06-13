@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "linter-ai",
+  "version": "1.0.0",
+  "description": "Modern JSON/YAML Linter",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"no test specified\""
+  },
+  "keywords": [
+    "linter",
+    "json",
+    "yaml",
+    "diff"
+  ],
+  "author": "",
+  "license": "MIT"
+}
