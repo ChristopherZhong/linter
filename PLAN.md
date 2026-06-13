@@ -10,12 +10,14 @@ This project aims to build a modern, static web-based linter and comparison tool
 - [x] **Persistence**: Save user input in `localStorage`.
 - [x] **Modern UI**: Dark-themed, responsive SPA.
 - [x] **Static Deployment**: Hosted on GitHub Pages.
+- [x] **Automated Testing**: Unit and E2E tests for core features.
 
 ## Tech Stack
 - **Framework**: Lit (Lightweight Web Components)
 - **Language**: TypeScript
 - **Bundler**: Vite
 - **Editor**: CodeMirror 6
+- **Testing**: Vitest & Playwright
 - **Styling**: Vanilla CSS (Custom Properties)
 - **Deployment**: GitHub Actions
 
@@ -41,7 +43,12 @@ This project aims to build a modern, static web-based linter and comparison tool
 - [x] Implement the Diffing View using CodeMirror merge addon.
 - [x] Handle side-by-side synchronization.
 
-### Phase 5: Polishing
+### Phase 5: Testing
+- [x] Setup testing infrastructure (Vitest, Playwright).
+- [x] Write unit tests for validation logic.
+- [x] Write E2E tests for UI interactions.
+
+### Phase 6: Polishing
 - [x] Add sample data.
 - [x] Finalize `README.md`.
 - [x] Verify build and deployment.
