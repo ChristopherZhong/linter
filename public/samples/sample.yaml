@@ -1,0 +1,11 @@
+# Sample YAML file
+project:
+  name: Linter.ai
+  version: 1.0.0
+  features:
+    - Linting
+    - Comparison
+    - Formatting
+  metadata:
+    author: Jules
+    license: MIT
