@@ -27,3 +27,12 @@ dist-ssr
 mockup.html
 mockup.png
 screenshot_mockup.js
+screenshot_verify.cjs
+final_lint.png
+final_compare.png
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

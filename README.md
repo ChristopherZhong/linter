@@ -39,6 +39,19 @@ A modern, fast, and static web application for linting and comparing JSON and YA
 
 The project is configured for automatic deployment to GitHub Pages via GitHub Actions on every push to the `main` branch.
 
+### Testing
+
+The project includes both unit and end-to-end (E2E) tests.
+
+- **Unit Tests** (Vitest):
+  ```bash
+  npm run test
+  ```
+- **E2E Tests** (Playwright):
+  ```bash
+  npm run test:e2e
+  ```
+
 ## License
 
 MIT
