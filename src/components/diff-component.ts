@@ -29,9 +29,43 @@ export class DiffComponent extends LitElement {
     }
     .cm-mergeView {
         height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    .cm-mergeViewEditors {
+        display: flex;
+        flex-direction: row;
+        flex-grow: 1;
+        height: 100%;
+        overflow: hidden;
     }
     .cm-mergeViewEditor {
         height: 100%;
+        flex: 1;
+        min-width: 0;
+    }
+    .cm-mergeViewEditor .cm-editor {
+        height: 100%;
+    }
+    /* Ensure gutters and other elements don't break layout */
+    .cm-mergeViewSpacer {
+        width: 2px;
+        background: var(--border);
+        flex-shrink: 0;
+    }
+    .cm-gutters {
+        display: flex !important;
+        flex-direction: row !important;
+        height: 100% !important;
+        align-items: stretch !important;
+    }
+    .cm-scroller {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: flex-start !important;
+    }
+    .cm-content {
+        flex-grow: 1;
     }
   `;
 
