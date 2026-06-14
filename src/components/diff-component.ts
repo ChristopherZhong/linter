@@ -10,6 +10,7 @@ import { MergeView } from '@codemirror/merge';
 @customElement('diff-component')
 export class DiffComponent extends LitElement {
   @property({ type: String }) mode: 'json' | 'yaml' = 'json';
+  @property({ type: String }) theme: 'light' | 'dark' = 'light';
   @property({ type: String }) original = '';
   @property({ type: String }) modified = '';
   @query('#diff-container') container!: HTMLElement;
@@ -35,7 +36,7 @@ export class DiffComponent extends LitElement {
   `;
 
   updated(changedProperties: Map<string, any>) {
-    if (changedProperties.has('mode') && this.mergeView) {
+    if ((changedProperties.has('mode') || changedProperties.has('theme')) && this.mergeView) {
       this.initDiff();
       return;
     }
@@ -70,9 +71,12 @@ export class DiffComponent extends LitElement {
 
     const extensions: Extension[] = [
       basicSetup,
-      oneDark,
       this.mode === 'json' ? json() : yaml(),
     ];
+
+    if (this.theme === 'dark') {
+      extensions.push(oneDark);
+    }
 
     this.mergeView = new MergeView({
       a: {

@@ -11,6 +11,7 @@ import { validateContent } from '../utils/validation';
 @customElement('editor-component')
 export class EditorComponent extends LitElement {
   @property({ type: String }) mode: 'json' | 'yaml' = 'json';
+  @property({ type: String }) theme: 'light' | 'dark' = 'light';
   @property({ type: String }) content = '';
   @query('#editor') editorContainer!: HTMLElement;
 
@@ -32,7 +33,7 @@ export class EditorComponent extends LitElement {
   `;
 
   updated(changedProperties: Map<string, any>) {
-    if (changedProperties.has('mode') && this.view) {
+    if ((changedProperties.has('mode') || changedProperties.has('theme')) && this.view) {
       this.view.dispatch({
         effects: StateEffect.reconfigure.of(this.getExtensions())
       });
@@ -52,9 +53,8 @@ export class EditorComponent extends LitElement {
   }
 
   private getExtensions(): Extension[] {
-    return [
+    const extensions: Extension[] = [
       basicSetup,
-      oneDark,
       this.mode === 'json' ? json() : yaml(),
       lintGutter(),
       linter(async (view) => await validateContent(view.state.doc.toString(), this.mode)),
@@ -70,6 +70,12 @@ export class EditorComponent extends LitElement {
         }
       })
     ];
+
+    if (this.theme === 'dark') {
+      extensions.push(oneDark);
+    }
+
+    return extensions;
   }
 
   private initEditor() {
