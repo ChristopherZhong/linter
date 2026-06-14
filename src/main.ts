@@ -64,12 +64,22 @@ export class LinterApp extends LitElement {
       cursor: pointer;
       transition: all 0.2s;
       color: var(--text-muted);
+      border: none;
+      background: transparent;
+      font-family: inherit;
     }
 
     .tab.active {
       background: var(--bg-card);
       color: var(--text-main);
       box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+
+    .tab:focus-visible,
+    button:focus-visible,
+    select:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
     }
 
     main {
@@ -236,17 +246,40 @@ export class LinterApp extends LitElement {
     return html`
       <header>
         <div class="logo">Linter.ai</div>
-        <div class="tabs">
-          <div class="tab ${this.activeTab === 'lint' ? 'active' : ''}" @click="${() => this.activeTab = 'lint'}">Lint</div>
-          <div class="tab ${this.activeTab === 'compare' ? 'active' : ''}" @click="${() => this.activeTab = 'compare'}">Compare</div>
+        <div class="tabs" role="tablist">
+          <button
+            id="tab-lint"
+            class="tab ${this.activeTab === 'lint' ? 'active' : ''}"
+            role="tab"
+            aria-selected="${this.activeTab === 'lint'}"
+            aria-controls="panel-lint"
+            @click="${() => this.activeTab = 'lint'}"
+          >
+            Lint
+          </button>
+          <button
+            id="tab-compare"
+            class="tab ${this.activeTab === 'compare' ? 'active' : ''}"
+            role="tab"
+            aria-selected="${this.activeTab === 'compare'}"
+            aria-controls="panel-compare"
+            @click="${() => this.activeTab = 'compare'}"
+          >
+            Compare
+          </button>
         </div>
         <div class="controls">
-          <select @change="${this.handleModeChange}" .value="${this.mode}">
+          <select @change="${this.handleModeChange}" .value="${this.mode}" aria-label="Select language mode">
             <option value="json">JSON</option>
             <option value="yaml">YAML</option>
           </select>
-          <button @click="${this.formatContent}">Format</button>
-          <button @click="${this.toggleTheme}" title="Theme: ${this.theme}" style="background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border);">
+          <button @click="${this.formatContent}" aria-label="Format content">Format</button>
+          <button
+            @click="${this.toggleTheme}"
+            title="Theme: ${this.theme}"
+            aria-label="Toggle theme, current: ${this.theme}"
+            style="background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border);"
+          >
             ${themeIcon}
           </button>
         </div>
@@ -254,7 +287,12 @@ export class LinterApp extends LitElement {
 
       <main>
         ${this.activeTab === 'lint' ? html`
-          <div class="editor-wrapper">
+          <div
+            id="panel-lint"
+            class="editor-wrapper"
+            role="tabpanel"
+            aria-labelledby="tab-lint"
+          >
             <div class="editor-toolbar">
               <div class="editor-title">Editor</div>
             </div>
@@ -266,7 +304,12 @@ export class LinterApp extends LitElement {
             ></editor-component>
           </div>
         ` : html`
-          <div class="editor-wrapper">
+          <div
+            id="panel-compare"
+            class="editor-wrapper"
+            role="tabpanel"
+            aria-labelledby="tab-compare"
+          >
             <div class="editor-toolbar">
               <div class="editor-title">Compare (Original vs Modified)</div>
             </div>
