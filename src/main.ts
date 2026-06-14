@@ -18,7 +18,7 @@ const DEFAULT_JSON = JSON.stringify({
 export class LinterApp extends LitElement {
   @state() private activeTab: 'lint' | 'compare' = 'lint';
   @state() private mode: 'json' | 'yaml' = 'json';
-  @state() private theme: 'light' | 'dark' = 'light';
+  @state() private theme: 'light' | 'dark' | 'system' = 'system';
   @state() private content = DEFAULT_JSON;
   @state() private modifiedContent = DEFAULT_JSON;
 
@@ -161,17 +161,39 @@ export class LinterApp extends LitElement {
 
     const savedTheme = localStorage.getItem('linter-theme');
     if (savedTheme) {
-        this.theme = savedTheme as 'light' | 'dark';
+        this.theme = savedTheme as 'light' | 'dark' | 'system';
     }
+
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+        if (this.theme === 'system') {
+            this.applyTheme();
+            this.requestUpdate();
+        }
+    });
+
     this.applyTheme();
   }
 
+  private getResolvedTheme(): 'light' | 'dark' {
+    if (this.theme === 'system') {
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    return this.theme;
+  }
+
   private applyTheme() {
-    document.documentElement.setAttribute('data-theme', this.theme);
+    document.documentElement.setAttribute('data-theme', this.getResolvedTheme());
   }
 
   private toggleTheme() {
-    this.theme = this.theme === 'light' ? 'dark' : 'light';
+    if (this.theme === 'system') {
+        this.theme = 'light';
+    } else if (this.theme === 'light') {
+        this.theme = 'dark';
+    } else {
+        this.theme = 'system';
+    }
     localStorage.setItem('linter-theme', this.theme);
     this.applyTheme();
   }
@@ -206,6 +228,11 @@ export class LinterApp extends LitElement {
   }
 
   render() {
+    const resolvedTheme = this.getResolvedTheme();
+    let themeIcon = '🖥️';
+    if (this.theme === 'light') themeIcon = '🌙';
+    if (this.theme === 'dark') themeIcon = '☀️';
+
     return html`
       <header>
         <div class="logo">Linter.ai</div>
@@ -219,8 +246,8 @@ export class LinterApp extends LitElement {
             <option value="yaml">YAML</option>
           </select>
           <button @click="${this.formatContent}">Format</button>
-          <button @click="${this.toggleTheme}" style="background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border);">
-            ${this.theme === 'light' ? '🌙' : '☀️'}
+          <button @click="${this.toggleTheme}" title="Theme: ${this.theme}" style="background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border);">
+            ${themeIcon}
           </button>
         </div>
       </header>
@@ -233,7 +260,7 @@ export class LinterApp extends LitElement {
             </div>
             <editor-component
                 .mode="${this.mode}"
-                .theme="${this.theme}"
+                .theme="${resolvedTheme}"
                 .content="${this.content}"
                 @content-changed="${this.handleContentChange}"
             ></editor-component>
@@ -245,7 +272,7 @@ export class LinterApp extends LitElement {
             </div>
             <diff-component
                 .mode="${this.mode}"
-                .theme="${this.theme}"
+                .theme="${resolvedTheme}"
                 .original="${this.content}"
                 .modified="${this.modifiedContent}"
                 @modified-changed="${this.handleModifiedChange}"
