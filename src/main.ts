@@ -18,6 +18,7 @@ const DEFAULT_JSON = JSON.stringify({
 export class LinterApp extends LitElement {
   @state() private activeTab: 'lint' | 'compare' = 'lint';
   @state() private mode: 'json' | 'yaml' = 'json';
+  @state() private theme: 'light' | 'dark' | 'system' = 'system';
   @state() private content = DEFAULT_JSON;
   @state() private modifiedContent = DEFAULT_JSON;
 
@@ -49,9 +50,10 @@ export class LinterApp extends LitElement {
     .tabs {
       display: flex;
       gap: 4px;
-      background: #1e1e1e;
+      background: var(--bg-main);
       padding: 4px;
       border-radius: 8px;
+      border: 1px solid var(--border);
     }
 
     .tab {
@@ -66,7 +68,8 @@ export class LinterApp extends LitElement {
 
     .tab.active {
       background: var(--bg-card);
-      color: white;
+      color: var(--text-main);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     }
 
     main {
@@ -93,7 +96,7 @@ export class LinterApp extends LitElement {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(255,255,255,0.02);
+      background: var(--bg-sidebar);
     }
 
     .editor-title {
@@ -155,6 +158,44 @@ export class LinterApp extends LitElement {
     }
     const savedMode = localStorage.getItem('linter-mode');
     if (savedMode) this.mode = savedMode as 'json' | 'yaml';
+
+    const savedTheme = localStorage.getItem('linter-theme');
+    if (savedTheme) {
+        this.theme = savedTheme as 'light' | 'dark' | 'system';
+    }
+
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+        if (this.theme === 'system') {
+            this.applyTheme();
+            this.requestUpdate();
+        }
+    });
+
+    this.applyTheme();
+  }
+
+  private getResolvedTheme(): 'light' | 'dark' {
+    if (this.theme === 'system') {
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    return this.theme;
+  }
+
+  private applyTheme() {
+    document.documentElement.setAttribute('data-theme', this.getResolvedTheme());
+  }
+
+  private toggleTheme() {
+    if (this.theme === 'system') {
+        this.theme = 'light';
+    } else if (this.theme === 'light') {
+        this.theme = 'dark';
+    } else {
+        this.theme = 'system';
+    }
+    localStorage.setItem('linter-theme', this.theme);
+    this.applyTheme();
   }
 
   private handleContentChange(e: CustomEvent) {
@@ -187,6 +228,11 @@ export class LinterApp extends LitElement {
   }
 
   render() {
+    const resolvedTheme = this.getResolvedTheme();
+    let themeIcon = '🖥️';
+    if (this.theme === 'light') themeIcon = '🌙';
+    if (this.theme === 'dark') themeIcon = '☀️';
+
     return html`
       <header>
         <div class="logo">Linter.ai</div>
@@ -200,6 +246,9 @@ export class LinterApp extends LitElement {
             <option value="yaml">YAML</option>
           </select>
           <button @click="${this.formatContent}">Format</button>
+          <button @click="${this.toggleTheme}" title="Theme: ${this.theme}" style="background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border);">
+            ${themeIcon}
+          </button>
         </div>
       </header>
 
@@ -211,6 +260,7 @@ export class LinterApp extends LitElement {
             </div>
             <editor-component
                 .mode="${this.mode}"
+                .theme="${resolvedTheme}"
                 .content="${this.content}"
                 @content-changed="${this.handleContentChange}"
             ></editor-component>
@@ -222,6 +272,7 @@ export class LinterApp extends LitElement {
             </div>
             <diff-component
                 .mode="${this.mode}"
+                .theme="${resolvedTheme}"
                 .original="${this.content}"
                 .modified="${this.modifiedContent}"
                 @modified-changed="${this.handleModifiedChange}"

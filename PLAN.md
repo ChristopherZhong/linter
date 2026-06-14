@@ -8,7 +8,8 @@ This project aims to build a modern, static web-based linter and comparison tool
 - [x] **Comparison Tool**: Side-by-side text diff for comparing two files.
 - [x] **Formatting**: Auto-format/beautify JSON and YAML.
 - [x] **Persistence**: Save user input in `localStorage`.
-- [x] **Modern UI**: Dark-themed, responsive SPA.
+- [x] **Modern UI**: Dark/Light mode toggle.
+- [x] **System Theme**: Support "follow system" as the default theme.
 - [x] **Static Deployment**: Hosted on GitHub Pages.
 - [x] **Automated Testing**: Unit and E2E tests for core features.
 
