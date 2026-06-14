@@ -1,0 +1,3 @@
+## 2025-05-14 - [Accessibility in Shadow DOM]
+**Learning:** Native fragment identifiers (e.g., `<a href="#target">`) in skip-to-content links do not automatically resolve to elements with that ID when they reside within a Shadow DOM root (common in Lit components). The browser's default behavior targets the document's light DOM.
+**Action:** For SPAs using Shadow DOM, implement skip links using JavaScript-based focus management or ensures the target is accessible through the shadow boundary if using global styles. For micro-UX, focus on semantic HTML (buttons vs divs) first as it provides the highest immediate impact with lower complexity.
