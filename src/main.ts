@@ -137,6 +137,63 @@ export class LinterApp extends LitElement {
         background: var(--accent-hover);
     }
 
+    .theme-toggle {
+        display: flex;
+        background: var(--bg-main);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 2px;
+        position: relative;
+        height: 32px;
+        box-sizing: border-box;
+    }
+
+    .theme-slider {
+        position: absolute;
+        top: 2px;
+        bottom: 2px;
+        left: 2px;
+        width: calc((100% - 4px) / 3);
+        background: var(--bg-card);
+        border-radius: 6px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        transition: transform 0.2s ease;
+        z-index: 0;
+    }
+
+    .theme-toggle[data-theme="light"] .theme-slider {
+        transform: translateX(100%);
+    }
+
+    .theme-toggle[data-theme="dark"] .theme-slider {
+        transform: translateX(200%);
+    }
+
+    .theme-option {
+        flex: 1;
+        background: transparent;
+        border: none;
+        color: var(--text-muted);
+        font-size: 14px;
+        cursor: pointer;
+        z-index: 1;
+        padding: 0 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: color 0.2s;
+        width: 32px;
+    }
+
+    .theme-option:hover {
+        background: transparent;
+        color: var(--text-main);
+    }
+
+    .theme-option.active {
+        color: var(--text-main);
+    }
+
     select {
       background: var(--bg-main);
       color: var(--text-main);
@@ -196,14 +253,8 @@ export class LinterApp extends LitElement {
     document.documentElement.setAttribute('data-theme', this.getResolvedTheme());
   }
 
-  private toggleTheme() {
-    if (this.theme === 'system') {
-        this.theme = 'light';
-    } else if (this.theme === 'light') {
-        this.theme = 'dark';
-    } else {
-        this.theme = 'system';
-    }
+  private setTheme(theme: 'light' | 'dark' | 'system') {
+    this.theme = theme;
     localStorage.setItem('linter-theme', this.theme);
     this.applyTheme();
   }
@@ -239,9 +290,6 @@ export class LinterApp extends LitElement {
 
   render() {
     const resolvedTheme = this.getResolvedTheme();
-    let themeIcon = '🖥️';
-    if (this.theme === 'light') themeIcon = '🌙';
-    if (this.theme === 'dark') themeIcon = '☀️';
 
     return html`
       <header>
@@ -274,14 +322,40 @@ export class LinterApp extends LitElement {
             <option value="yaml">YAML</option>
           </select>
           <button @click="${this.formatContent}" aria-label="Format content">Format</button>
-          <button
-            @click="${this.toggleTheme}"
-            title="Theme: ${this.theme}"
-            aria-label="Toggle theme, current: ${this.theme}"
-            style="background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border);"
-          >
-            ${themeIcon}
-          </button>
+
+          <div class="theme-toggle" data-theme="${this.theme}" role="radiogroup" aria-label="Select theme">
+            <div class="theme-slider"></div>
+            <button
+              class="theme-option ${this.theme === 'system' ? 'active' : ''}"
+              @click="${() => this.setTheme('system')}"
+              role="radio"
+              aria-checked="${this.theme === 'system'}"
+              title="System Theme"
+              aria-label="System Theme"
+            >
+              🖥️
+            </button>
+            <button
+              class="theme-option ${this.theme === 'light' ? 'active' : ''}"
+              @click="${() => this.setTheme('light')}"
+              role="radio"
+              aria-checked="${this.theme === 'light'}"
+              title="Light Theme"
+              aria-label="Light Theme"
+            >
+              ☀️
+            </button>
+            <button
+              class="theme-option ${this.theme === 'dark' ? 'active' : ''}"
+              @click="${() => this.setTheme('dark')}"
+              role="radio"
+              aria-checked="${this.theme === 'dark'}"
+              title="Dark Theme"
+              aria-label="Dark Theme"
+            >
+              🌙
+            </button>
+          </div>
         </div>
       </header>
 

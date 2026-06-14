@@ -34,3 +34,31 @@ test('persistence', async ({ page }) => {
   await page.reload();
   await expect(page.locator('editor-component')).toBeVisible();
 });
+
+test('theme toggle', async ({ page }) => {
+  const themeToggle = page.locator('.theme-toggle');
+  await expect(themeToggle).toBeVisible();
+
+  const lightBtn = page.getByRole('radio', { name: 'Light Theme' });
+  const darkBtn = page.getByRole('radio', { name: 'Dark Theme' });
+  const systemBtn = page.getByRole('radio', { name: 'System Theme' });
+
+  // Click Light
+  await lightBtn.click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+
+  // Click Dark
+  await darkBtn.click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+
+  // Click System
+  await systemBtn.click();
+  // Resolved theme for system might be light or dark, but data-theme attribute should reflect it.
+  const theme = await page.locator('html').getAttribute('data-theme');
+  expect(['light', 'dark']).toContain(theme);
+
+  // Check persistence
+  await darkBtn.click();
+  await page.reload();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+});
