@@ -54,18 +54,67 @@ export class DiffComponent extends LitElement {
         flex-shrink: 0;
     }
     .cm-gutters {
-        display: flex !important;
-        flex-direction: row !important;
+        display: flex;
+        flex-direction: row;
         height: 100% !important;
         align-items: stretch !important;
     }
     .cm-scroller {
-        display: flex !important;
-        flex-direction: row !important;
+        display: flex;
+        flex-direction: row;
         align-items: flex-start !important;
     }
     .cm-content {
         flex-grow: 1;
+    }
+    .cm-line {
+        white-space: pre !important;
+    }
+
+    /* Diff highlights */
+    .cm-merge-a .cm-changedLine,
+    .cm-deletedChunk {
+        background-color: rgba(239, 68, 68, 0.15) !important;
+    }
+    .cm-merge-b .cm-changedLine,
+    .cm-inlineChangedLine {
+        background-color: rgba(34, 197, 94, 0.15) !important;
+    }
+
+    .cm-merge-a .cm-changedText,
+    .cm-deletedText {
+        background-color: rgba(239, 68, 68, 0.3) !important;
+        text-decoration: line-through;
+    }
+    .cm-merge-b .cm-changedText {
+        background-color: rgba(34, 197, 94, 0.3) !important;
+    }
+
+    /* Line-based highlights (fallback/explicit) */
+    .cm-deletedLine {
+        background-color: rgba(239, 68, 68, 0.15) !important;
+        display: block;
+    }
+    .cm-insertedLine {
+        background-color: rgba(34, 197, 94, 0.15) !important;
+        display: block;
+    }
+
+    /* Dark theme adjustments */
+    :host([theme="dark"]) .cm-merge-a .cm-changedLine,
+    :host([theme="dark"]) .cm-deletedChunk {
+        background-color: rgba(248, 113, 113, 0.2) !important;
+    }
+    :host([theme="dark"]) .cm-merge-b .cm-changedLine,
+    :host([theme="dark"]) .cm-inlineChangedLine {
+        background-color: rgba(74, 222, 128, 0.2) !important;
+    }
+    :host([theme="dark"]) .cm-merge-a .cm-changedText,
+    :host([theme="dark"]) .cm-deletedText {
+        background-color: rgba(248, 113, 113, 0.4) !important;
+    }
+    :host([theme="dark"]) .cm-merge-b .cm-changedText {
+        background-color: rgba(74, 222, 128, 0.4) !important;
     }
   `;
 
