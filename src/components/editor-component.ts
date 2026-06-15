@@ -84,7 +84,8 @@ export class EditorComponent extends LitElement {
         doc: this.content,
         extensions: this.getExtensions()
       }),
-      parent: this.editorContainer
+      parent: this.editorContainer,
+      root: this.renderRoot as ShadowRoot
     });
   }
 

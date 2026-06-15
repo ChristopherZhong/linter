@@ -57,12 +57,10 @@ export class DiffComponent extends LitElement {
         display: flex;
         flex-direction: row;
         height: 100% !important;
-        align-items: stretch !important;
     }
     .cm-scroller {
         display: flex;
         flex-direction: row;
-        align-items: flex-start !important;
     }
     .cm-content {
         flex-grow: 1;
@@ -183,7 +181,8 @@ export class DiffComponent extends LitElement {
             })
         ]
       },
-      parent: this.container
+      parent: this.container,
+      root: this.renderRoot as ShadowRoot
     });
   }
 
