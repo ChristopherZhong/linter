@@ -139,7 +139,7 @@ export class LinterApp extends LitElement {
 
     .theme-toggle {
         display: flex;
-        background: var(--bg-main);
+        background: var(--bg-sidebar);
         border: 1px solid var(--border);
         border-radius: 8px;
         padding: 2px;
@@ -156,7 +156,8 @@ export class LinterApp extends LitElement {
         width: calc((100% - 4px) / 3);
         background: var(--bg-card);
         border-radius: 6px;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+        border: 1px solid var(--border);
         transition: transform 0.2s ease;
         z-index: 0;
     }
@@ -181,17 +182,20 @@ export class LinterApp extends LitElement {
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: color 0.2s;
+        transition: all 0.2s;
         width: 32px;
+        opacity: 0.5;
     }
 
     .theme-option:hover {
         background: transparent;
         color: var(--text-main);
+        opacity: 0.8;
     }
 
     .theme-option.active {
         color: var(--text-main);
+        opacity: 1;
     }
 
     select {
