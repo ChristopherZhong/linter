@@ -94,6 +94,64 @@ test('diff component scrolls when content exceeds screen height', async ({ page 
   expect(isScrollable).toBe(true);
 });
 
+test('diff component scroll is synchronized between side A and side B', async ({ page }) => {
+  const largeJson = JSON.stringify(
+    Array.from({ length: 100 }, (_, i) => ({ id: i, name: `Item ${i}` })),
+    null,
+    2
+  );
+
+  await page.evaluate((json) => {
+    localStorage.setItem('linter-content', json);
+  }, largeJson);
+
+  await page.reload();
+
+  const compareTab = page.locator('.tab', { hasText: 'Compare' });
+  await compareTab.click();
+
+  // Scroll side A
+  await page.evaluate(() => {
+    const diffComp = document.querySelector('linter-app')?.shadowRoot?.querySelector('diff-component');
+    const scrollers = diffComp?.shadowRoot?.querySelectorAll('.cm-scroller');
+    if (scrollers && scrollers.length >= 2) {
+      scrollers[0].scrollTop = 300;
+      scrollers[0].dispatchEvent(new Event('scroll'));
+    }
+  });
+
+  // Wait briefly for scroll sync event handler
+  await page.waitForTimeout(100);
+
+  const scrollTopB = await page.evaluate(() => {
+    const diffComp = document.querySelector('linter-app')?.shadowRoot?.querySelector('diff-component');
+    const scrollers = diffComp?.shadowRoot?.querySelectorAll('.cm-scroller');
+    return scrollers && scrollers.length >= 2 ? scrollers[1].scrollTop : 0;
+  });
+
+  expect(scrollTopB).toBeCloseTo(300, -1);
+
+  // Scroll side B
+  await page.evaluate(() => {
+    const diffComp = document.querySelector('linter-app')?.shadowRoot?.querySelector('diff-component');
+    const scrollers = diffComp?.shadowRoot?.querySelectorAll('.cm-scroller');
+    if (scrollers && scrollers.length >= 2) {
+      scrollers[1].scrollTop = 150;
+      scrollers[1].dispatchEvent(new Event('scroll'));
+    }
+  });
+
+  await page.waitForTimeout(100);
+
+  const scrollTopA = await page.evaluate(() => {
+    const diffComp = document.querySelector('linter-app')?.shadowRoot?.querySelector('diff-component');
+    const scrollers = diffComp?.shadowRoot?.querySelectorAll('.cm-scroller');
+    return scrollers && scrollers.length >= 2 ? scrollers[0].scrollTop : 0;
+  });
+
+  expect(scrollTopA).toBeCloseTo(150, -1);
+});
+
 test('theme toggle', async ({ page }) => {
   const themeToggle = page.locator('.theme-toggle');
   await expect(themeToggle).toBeVisible();
