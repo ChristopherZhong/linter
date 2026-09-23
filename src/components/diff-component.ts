@@ -16,6 +16,15 @@ export class DiffComponent extends LitElement {
   @query('#diff-container') container!: HTMLElement;
 
   private mergeView?: MergeView;
+  private cleanupScrollSync?: () => void;
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    if (this.cleanupScrollSync) {
+      this.cleanupScrollSync();
+      this.cleanupScrollSync = undefined;
+    }
+  }
 
   static styles = css`
     :host {
@@ -188,6 +197,53 @@ export class DiffComponent extends LitElement {
       parent: this.container,
       root: this.renderRoot as ShadowRoot
     });
+
+    this.setupScrollSync();
+  }
+
+  private setupScrollSync() {
+    if (this.cleanupScrollSync) {
+      this.cleanupScrollSync();
+      this.cleanupScrollSync = undefined;
+    }
+
+    if (!this.mergeView) return;
+
+    const scrollerA = this.mergeView.a.scrollDOM;
+    const scrollerB = this.mergeView.b.scrollDOM;
+
+    if (!scrollerA || !scrollerB) return;
+
+    let activeSource: 'A' | 'B' | null = null;
+    let syncTimeout: ReturnType<typeof setTimeout> | null = null;
+
+    const syncScroll = (source: 'A' | 'B') => {
+      if (activeSource && activeSource !== source) return;
+      activeSource = source;
+
+      const from = source === 'A' ? scrollerA : scrollerB;
+      const to = source === 'A' ? scrollerB : scrollerA;
+
+      to.scrollTop = from.scrollTop;
+      to.scrollLeft = from.scrollLeft;
+
+      if (syncTimeout) clearTimeout(syncTimeout);
+      syncTimeout = setTimeout(() => {
+        activeSource = null;
+      }, 50);
+    };
+
+    const onScrollA = () => syncScroll('A');
+    const onScrollB = () => syncScroll('B');
+
+    scrollerA.addEventListener('scroll', onScrollA, { passive: true });
+    scrollerB.addEventListener('scroll', onScrollB, { passive: true });
+
+    this.cleanupScrollSync = () => {
+      scrollerA.removeEventListener('scroll', onScrollA);
+      scrollerB.removeEventListener('scroll', onScrollB);
+      if (syncTimeout) clearTimeout(syncTimeout);
+    };
   }
 
   render() {
