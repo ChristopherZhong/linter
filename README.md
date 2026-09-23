@@ -54,4 +54,4 @@ The project includes both unit and end-to-end (E2E) tests.
 
 ## License
 
-MIT
+Apache License 2.0
