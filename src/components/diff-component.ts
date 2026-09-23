@@ -19,16 +19,22 @@ export class DiffComponent extends LitElement {
 
   static styles = css`
     :host {
-      display: block;
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 0%;
+      min-height: 0;
       height: 100%;
       width: 100%;
       overflow: hidden;
     }
     #diff-container {
+      flex: 1 1 0%;
+      min-height: 0;
       height: 100%;
+      overflow: hidden;
     }
     .cm-mergeView {
-        height: 100%;
+        height: 100% !important;
         display: flex;
         flex-direction: column;
     }
@@ -36,16 +42,18 @@ export class DiffComponent extends LitElement {
         display: flex;
         flex-direction: row;
         flex-grow: 1;
-        height: 100%;
+        height: 100% !important;
         overflow: hidden;
+        min-height: 0;
     }
     .cm-mergeViewEditor {
-        height: 100%;
-        flex: 1;
+        height: 100% !important;
+        flex: 1 1 0%;
         min-width: 0;
+        min-height: 0;
     }
     .cm-mergeViewEditor .cm-editor {
-        height: 100%;
+        height: 100% !important;
     }
     /* Ensure gutters and other elements don't break layout */
     .cm-mergeViewSpacer {
@@ -56,17 +64,12 @@ export class DiffComponent extends LitElement {
     .cm-gutters {
         display: flex;
         flex-direction: row;
-        height: 100% !important;
     }
     .cm-scroller {
-        display: flex;
-        flex-direction: row;
-    }
-    .cm-content {
-        flex-grow: 1;
+        overflow: auto;
     }
     .cm-line {
-        white-space: pre !important;
+        white-space: pre-wrap !important;
     }
 
     /* Diff highlights */
@@ -152,6 +155,7 @@ export class DiffComponent extends LitElement {
 
     const extensions: Extension[] = [
       basicSetup,
+      EditorView.lineWrapping,
       this.mode === 'json' ? json() : yaml(),
     ];
 

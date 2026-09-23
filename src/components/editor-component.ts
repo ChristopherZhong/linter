@@ -19,16 +19,25 @@ export class EditorComponent extends LitElement {
 
   static styles = css`
     :host {
-      display: block;
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 0%;
+      min-height: 0;
       height: 100%;
       width: 100%;
       overflow: hidden;
     }
     #editor {
+      flex: 1 1 0%;
+      min-height: 0;
       height: 100%;
+      overflow: hidden;
     }
     .cm-editor {
-      height: 100%;
+      height: 100% !important;
+    }
+    .cm-scroller {
+      overflow: auto !important;
     }
   `;
 
@@ -55,6 +64,7 @@ export class EditorComponent extends LitElement {
   private getExtensions(): Extension[] {
     const extensions: Extension[] = [
       basicSetup,
+      EditorView.lineWrapping,
       this.mode === 'json' ? json() : yaml(),
       lintGutter(),
       linter(async (view) => await validateContent(view.state.doc.toString(), this.mode)),

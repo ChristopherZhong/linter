@@ -88,6 +88,9 @@ export class LinterApp extends LitElement {
       overflow: hidden;
       padding: 20px;
       gap: 20px;
+      min-height: 0;
+      height: calc(100vh - 56px - 32px);
+      box-sizing: border-box;
     }
 
     .editor-wrapper {
@@ -98,6 +101,17 @@ export class LinterApp extends LitElement {
       border: 1px solid var(--border);
       border-radius: 12px;
       overflow: hidden;
+      min-height: 0;
+      height: 100%;
+    }
+
+    editor-component,
+    diff-component {
+      flex: 1;
+      min-height: 0;
+      height: 0;
+      display: flex;
+      flex-direction: column;
     }
 
     .editor-toolbar {
