@@ -3,7 +3,7 @@ import { customElement, property, query } from 'lit/decorators.js';
 import { EditorView, basicSetup } from 'codemirror';
 import { json } from '@codemirror/lang-json';
 import { yaml } from '@codemirror/lang-yaml';
-import { EditorState, Extension } from '@codemirror/state';
+import { Extension } from '@codemirror/state';
 import { oneDark } from '@codemirror/theme-one-dark';
 import { MergeView } from '@codemirror/merge';
 
@@ -175,7 +175,20 @@ export class DiffComponent extends LitElement {
     this.mergeView = new MergeView({
       a: {
         doc: this.original,
-        extensions: [...extensions, EditorState.readOnly.of(true)]
+        extensions: [
+            ...extensions,
+            EditorView.updateListener.of((update) => {
+                if (update.docChanged) {
+                    const newContent = update.state.doc.toString();
+                    if (newContent !== this.original) {
+                        this.original = newContent;
+                        this.dispatchEvent(new CustomEvent('original-changed', {
+                            detail: { content: this.original }
+                        }));
+                    }
+                }
+            })
+        ]
       },
       b: {
         doc: this.modified,

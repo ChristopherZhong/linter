@@ -282,6 +282,11 @@ export class LinterApp extends LitElement {
     localStorage.setItem('linter-content', this.content);
   }
 
+  private handleOriginalChange(e: CustomEvent) {
+      this.content = e.detail.content;
+      localStorage.setItem('linter-content', this.content);
+  }
+
   private handleModifiedChange(e: CustomEvent) {
       this.modifiedContent = e.detail.content;
   }
@@ -410,6 +415,7 @@ export class LinterApp extends LitElement {
                 .theme="${resolvedTheme}"
                 .original="${this.content}"
                 .modified="${this.modifiedContent}"
+                @original-changed="${this.handleOriginalChange}"
                 @modified-changed="${this.handleModifiedChange}"
             ></diff-component>
           </div>
