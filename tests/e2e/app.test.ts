@@ -179,3 +179,45 @@ test('theme toggle', async ({ page }) => {
   await page.reload();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
 });
+
+test('editing text in left view of compare window updates state and persists', async ({ page }) => {
+  const compareTab = page.locator('.tab', { hasText: 'Compare' });
+  await compareTab.click();
+
+  // Focus and type text into left editor (side A)
+  await page.evaluate(() => {
+    const diffComp = document.querySelector('linter-app')?.shadowRoot?.querySelector('diff-component');
+    const scrollers = diffComp?.shadowRoot?.querySelectorAll('.cm-content');
+    if (scrollers && scrollers.length >= 1) {
+      (scrollers[0] as HTMLElement).focus();
+    }
+  });
+
+  const editedText = '{"inserted": "left-side-test"}';
+  await page.evaluate((text) => {
+    const diffComp = document.querySelector('linter-app')?.shadowRoot?.querySelector('diff-component');
+    // Access CodeMirror view directly or dispatch doc change
+    const mergeView = (diffComp as any)?.mergeView;
+    if (mergeView?.a) {
+      mergeView.a.dispatch({
+        changes: { from: 0, to: mergeView.a.state.doc.length, insert: text }
+      });
+    }
+  }, editedText);
+
+  // Check localStorage was updated
+  const stored = await page.evaluate(() => localStorage.getItem('linter-content'));
+  expect(stored).toBe(editedText);
+
+  // Switch back to Lint tab and verify editor content matches
+  const lintTab = page.locator('.tab', { hasText: 'Lint' });
+  await lintTab.click();
+
+  const editorText = await page.evaluate(() => {
+    const editorComp = document.querySelector('linter-app')?.shadowRoot?.querySelector('editor-component');
+    const editorView = (editorComp as any)?.view;
+    return editorView?.state.doc.toString();
+  });
+
+  expect(editorText).toBe(editedText);
+});
