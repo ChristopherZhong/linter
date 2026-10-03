@@ -36,7 +36,7 @@
   "devDependencies": {
     "@commitlint/cli": "^21.2.3",
     "@commitlint/config-conventional": "^21.2.3",
-    "@playwright/test": "^1.60.0",
+    "@playwright/test": "^1.63.0",
     "@semantic-release/exec": "^7.1.0",
     "@storybook/web-components": "^10.6.1",
     "@storybook/web-components-vite": "^10.6.1",
