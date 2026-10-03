@@ -44,7 +44,7 @@
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^22.13.10",
     "@vitest/browser": "^5.0.2",
-    "conventional-changelog-conventionalcommits": "^9.3.1",
+    "conventional-changelog-conventionalcommits": "^10.4.0",
     "husky": "^9.1.7",
     "jsdom": "^29.1.1",
     "lint-staged": "^17.6.0",
