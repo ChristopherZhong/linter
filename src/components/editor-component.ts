@@ -25,20 +25,39 @@ export class EditorComponent extends LitElement {
       flex-direction: column;
       flex: 1 1 0%;
       min-height: 0;
+      min-width: 0;
+      max-width: 100%;
       height: 100%;
       width: 100%;
       overflow: hidden;
+      box-sizing: border-box;
     }
     #editor {
+      display: flex;
+      flex-direction: column;
       flex: 1 1 0%;
       min-height: 0;
+      min-width: 0;
+      max-width: 100%;
       height: 100%;
+      width: 100%;
       overflow: hidden;
+      box-sizing: border-box;
     }
     .cm-editor {
+      display: flex !important;
+      flex-direction: column !important;
+      flex: 1 1 0% !important;
+      min-height: 0 !important;
+      min-width: 0 !important;
+      max-width: 100% !important;
       height: 100% !important;
+      width: 100% !important;
     }
     .cm-scroller {
+      flex: 1 1 0% !important;
+      min-height: 0 !important;
+      min-width: 0 !important;
       overflow: auto !important;
     }
   `;

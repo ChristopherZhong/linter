@@ -34,37 +34,66 @@ export class DiffComponent extends LitElement {
       flex-direction: column;
       flex: 1 1 0%;
       min-height: 0;
+      min-width: 0;
+      max-width: 100%;
       height: 100%;
       width: 100%;
       overflow: hidden;
+      box-sizing: border-box;
     }
     #diff-container {
+      display: flex;
+      flex-direction: column;
       flex: 1 1 0%;
       min-height: 0;
+      min-width: 0;
+      max-width: 100%;
       height: 100%;
+      width: 100%;
       overflow: hidden;
+      box-sizing: border-box;
     }
     .cm-mergeView {
         height: 100% !important;
+        width: 100% !important;
         display: flex;
         flex-direction: column;
+        flex: 1 1 0%;
+        min-height: 0;
+        min-width: 0;
+        max-width: 100%;
+        box-sizing: border-box;
     }
     .cm-mergeViewEditors {
         display: flex;
         flex-direction: row;
-        flex-grow: 1;
+        flex: 1 1 0%;
         height: 100% !important;
+        width: 100% !important;
         overflow: hidden;
         min-height: 0;
+        min-width: 0;
+        max-width: 100%;
+        box-sizing: border-box;
     }
     .cm-mergeViewEditor {
         height: 100% !important;
         flex: 1 1 0%;
+        display: flex;
+        flex-direction: column;
         min-width: 0;
         min-height: 0;
+        max-width: 100%;
+        box-sizing: border-box;
     }
     .cm-mergeViewEditor .cm-editor {
         height: 100% !important;
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        flex: 1 1 0% !important;
+        min-width: 0 !important;
+        min-height: 0 !important;
     }
     /* Ensure gutters and other elements don't break layout */
     .cm-mergeViewSpacer {
@@ -77,7 +106,10 @@ export class DiffComponent extends LitElement {
         flex-direction: row;
     }
     .cm-scroller {
-        overflow: auto;
+        flex: 1 1 0% !important;
+        min-height: 0 !important;
+        min-width: 0 !important;
+        overflow: auto !important;
     }
     .cm-line {
         white-space: pre-wrap !important;

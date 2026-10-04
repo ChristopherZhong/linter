@@ -47,6 +47,10 @@ export class ConfigLensApp extends LitElement {
       display: flex;
       flex-direction: column;
       height: 100vh;
+      max-width: 100vw;
+      width: 100%;
+      overflow: hidden;
+      box-sizing: border-box;
       background: var(--bg-main);
       color: var(--text-main);
     }
@@ -60,6 +64,9 @@ export class ConfigLensApp extends LitElement {
       justify-content: space-between;
       background-color: var(--bg-sidebar);
       flex-shrink: 0;
+      min-width: 0;
+      max-width: 100%;
+      box-sizing: border-box;
     }
 
     .logo {
@@ -69,6 +76,7 @@ export class ConfigLensApp extends LitElement {
       font-weight: 600;
       font-size: 18px;
       letter-spacing: -0.02em;
+      flex-shrink: 0;
     }
 
     .logo-icon {
@@ -126,6 +134,9 @@ export class ConfigLensApp extends LitElement {
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       z-index: 10;
       flex-shrink: 0;
+      min-width: 0;
+      max-width: 100%;
+      box-sizing: border-box;
     }
 
     .version-notice-content {
@@ -174,17 +185,20 @@ export class ConfigLensApp extends LitElement {
     }
 
     main {
-      flex: 1;
+      flex: 1 1 0%;
       display: flex;
       overflow: hidden;
       padding: 20px;
       gap: 20px;
       min-height: 0;
+      min-width: 0;
+      max-width: 100%;
       box-sizing: border-box;
+      width: 100%;
     }
 
     .editor-wrapper {
-      flex: 1;
+      flex: 1 1 0%;
       display: flex;
       flex-direction: column;
       background: var(--bg-card);
@@ -192,14 +206,21 @@ export class ConfigLensApp extends LitElement {
       border-radius: 12px;
       overflow: hidden;
       min-height: 0;
+      min-width: 0;
+      max-width: 100%;
       height: 100%;
+      width: 100%;
+      box-sizing: border-box;
     }
 
     editor-component,
     diff-component {
-      flex: 1;
+      flex: 1 1 0%;
       min-height: 0;
+      min-width: 0;
+      max-width: 100%;
       height: 0;
+      width: 100%;
       display: flex;
       flex-direction: column;
     }
@@ -211,6 +232,9 @@ export class ConfigLensApp extends LitElement {
       justify-content: space-between;
       align-items: center;
       background: var(--bg-sidebar);
+      flex-shrink: 0;
+      min-width: 0;
+      box-sizing: border-box;
     }
 
     .editor-title {
@@ -246,6 +270,8 @@ export class ConfigLensApp extends LitElement {
     .controls {
         display: flex;
         gap: 12px;
+        align-items: center;
+        min-width: 0;
     }
 
     button {
@@ -364,6 +390,9 @@ export class ConfigLensApp extends LitElement {
       color: var(--text-muted);
       background: var(--bg-sidebar);
       flex-shrink: 0;
+      min-width: 0;
+      max-width: 100%;
+      box-sizing: border-box;
     }
 
     footer a {
